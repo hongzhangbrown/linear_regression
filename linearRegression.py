@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 import matplotlib
 import datetime
 from dateutil.parser import parse
+from random import shuffle
 from sklearn.linear_model import LinearRegression
+
+
 
 def add_intersection(X):
 	l = len(X)
@@ -40,9 +43,13 @@ def Rsquare(X,Y,beta):
 
 
 
-def five_fold(X,Y,gamma=0):
+def five_fold(X,Y,gamma=0):	
 	l = len(X)
 	subset_size = l/5
+	index = list(range(l))
+	shuffle(index)
+	X = X[index]
+	Y = Y[index]
 	RR = np.zeros(5)
 	Rss = np.zeros(5)
 	for i in range(5):
@@ -69,7 +76,7 @@ def get_data():
 	Y = Y.astype(float)
 	return X,Y,date
 
-X, Y,date = get_data()	
+X, Y, date = get_data()	
 date = pd.to_datetime(date)
 plt.figure()
 plt.plot(date,X,label = 'Blackstone')
@@ -81,8 +88,8 @@ plt.show()
 
 clf = LinearRegression()
 clf.fit(X,Y)
-print 'rsquare from package', clf.score(X,Y),clf.coef_
+print 'rsquare from package', clf.score(X,Y)
 rsquare, average_error = five_fold(X,Y)
 print 'rsquare estimator is', rsquare
-print 'average error of prediction is', average_error
+print 'average error prediction is', average_error
 
